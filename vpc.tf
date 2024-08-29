@@ -44,3 +44,30 @@ resource "aws_route_table_association" "a_rt_clase_1" {
   subnet_id      = aws_subnet.Subnet_clase_1.id
   route_table_id = aws_route_table.rt_clase_1.id
 }
+
+# agrego security_groups en la nueva rama
+resource "aws_security_group" "sg_ssh" {
+        name = "SG acceso SSH"
+        description = "Permite el acceso SSH desde cualquier lugar"
+        vpc_id = aws_vpc.vpc_clase.id
+
+        tags = {
+            Name = "SG_clase_acceso_SSH"
+        }
+
+        ingress {
+            from_port = 22
+            to_port = 22
+            protocol = "tcp"
+            cidr_blocks = ["0.0.0.0/0"]
+            description = "Permite acceso puerto 22"
+        }
+
+        egress {
+            from_port = 0
+            to_port = 0
+            protocol = "-1"
+            cidr_blocks = ["0.0.0.0/0"]
+            description = "permite salida a cualquier ip y puerto"
+        }
+    }
